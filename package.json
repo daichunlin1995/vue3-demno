@@ -8,12 +8,32 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.25"
+    "axios": "^0.27.2",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "naive-ui": "^2.28.4",
+    "pinia": "^2.0.14",
+    "unplugin-vue-components": "^0.19.5",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.15"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
     "@vitejs/plugin-vue": "^2.3.1",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-pxrettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "prettier": "^2.6.2",
     "typescript": "^4.5.4",
     "vite": "^2.9.7",
     "vue-tsc": "^0.34.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
