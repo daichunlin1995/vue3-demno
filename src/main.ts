@@ -1,15 +1,17 @@
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
+// 清除默认样式
+import 'normalize.css/normalize.css'
 // 引入router
-import useRouter from "./router";
+import useRouter from './router'
 // 引入pinia
-import { createPinia } from "pinia";
+import usePinia from './store'
 // 获取vue实例
-const app = createApp(App);
+const app = createApp(App)
 // 注册router
-const router = useRouter(app);
-app.use(router);
+const router = useRouter(app)
+app.use(router)
 // 注册pinia
-const store = createPinia();
-app.use(store);
-app.mount("#app");
+const store = usePinia()
+app.use(store)
+app.mount('#app')

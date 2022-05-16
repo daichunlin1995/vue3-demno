@@ -1,3 +1,4 @@
 export const enum Names {
-  MAIN = "main",
+  MAIN = 'main',
+  USER = 'user'
 }
