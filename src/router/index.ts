@@ -2,19 +2,22 @@
  * @Author       : daichunlin
  * @Date         : 2022-05-12 20:32:37
  * @LastEditors  : daichunlin
- * @LastEditTime : 2022-05-16 15:01:21
+ * @LastEditTime : 2022-05-26 15:50:48
  * @Description  : router
  * @FilePath     : /vue3-project/src/router/index.ts
  */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { App } from 'vue'
-import Home from '@/views/Home.vue'
+import Layout from '@/layout/index.vue'
 import { useRouterListener } from './router.config'
+import menuRoutes from './menu'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Layout',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [...menuRoutes]
   },
   {
     path: '/login',

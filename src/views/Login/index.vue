@@ -4,7 +4,13 @@
     <div class="forms-container">
       <div class="signin-signup">
         <!-- 登录or注册表单 -->
-        <Login />
+        <transition
+          enter-active-class="animate__animated animate__fadeIn animate__delay-1s"
+          leave-active-class="animate__animated animate__fadeOut animate__delay-1s"
+        >
+          <Login v-if="!signUpMode" />
+          <Register v-else />
+        </transition>
       </div>
     </div>
     <!-- 左右切换动画 -->
@@ -35,6 +41,7 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { userStore } from '@/store/user'
 import Login from './component/Login.vue'
+import Register from './component/Register.vue'
 const router = useRouter()
 const route = useRoute()
 const store = userStore()
@@ -68,7 +75,7 @@ const signUpMode = ref<boolean>(false)
 
 .signin-signup {
   position: absolute;
-  top: 50%;
+  top: 35%;
   transform: translate(-50%, -50%);
   left: 75%;
   width: 20%;
@@ -405,4 +412,3 @@ form.sign-up-form {
   width: 100%;
 }
 </style>
->

@@ -19,38 +19,39 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import {
-  FormInst,
-  FormItemInst,
-  FormItemRule,
-  FormValidationError,
-  useMessage,
-  FormRules
-} from 'naive-ui'
+import { FormInst, useMessage, FormRules } from 'naive-ui'
 import { User } from '@/api'
 import { userStore } from '@/store/user'
+import { useRouter, useRoute } from 'vue-router'
+import { setPwdEncrypt, setCookie } from '@/utils/helper'
+import { IResponse } from '/#/axios'
 interface ModelType {
-  user: string | null
-  password: string | null
+  user: string
+  password: string
 }
+
+const router = useRouter()
+const route = useRoute()
+const store = userStore()
 
 const formRef = ref<FormInst | null>(null)
 const message = useMessage()
 const model = ref<ModelType>({
-  user: null,
-  password: null
+  user: '',
+  password: ''
 })
+
 const rules: FormRules = {
   user: [
     {
       required: true,
-      message: 'User is required'
+      message: '请输入用户名'
     }
   ],
   password: [
     {
       required: true,
-      message: 'Password is required'
+      message: '请输入密码'
     }
   ]
 }
@@ -62,18 +63,24 @@ const handleLoginIn = (e: MouseEvent) => {
   let event = e || window.event
   event.preventDefault()
   // validate 是 undefined时候 验证通过
-  formRef.value?.validate((validate) => {
-    console.log(validate)
+  formRef.value?.validate(async (validate) => {
     if (!validate) {
-      // 走接口 类型声明需要处理
-      User.loginIn().then((res: any) => {
-        console.log(res)
-        if (res.error === 0) {
-          // 存储token
-          const store = userStore()
-          store.vToken = res.content.token
-        }
-      })
+      loading.value = true
+      // 获取公钥
+      let result = await User.getPublicKeyApi()
+      const cryptPassword = setPwdEncrypt(result.data, model.value.password)
+      // 登录操作
+      let loginResponse = await User.loginInApi({ user: model.value.user, password: cryptPassword })
+      loading.value = false
+      // 处理登录结果
+      if ((loginResponse as Partial<IResponse>).code === 0) {
+        // 存储token
+        store.setToken(loginResponse.data.token)
+        // 跳转
+        router.push({
+          path: (route.query.redirect as string) || '/'
+        })
+      }
     }
   })
 }
@@ -81,6 +88,10 @@ const handleLoginIn = (e: MouseEvent) => {
 <style scoped lang="less">
 @import '@/assets/less/variable.less';
 .login-container {
+  width: 400px;
+  position: absolute;
+  left: 0;
+  top: 0;
   padding: 20px;
   box-shadow: 0px 0px 5px @color;
   border-radius: 3px;
