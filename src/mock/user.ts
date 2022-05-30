@@ -20,7 +20,13 @@ export default [
         code: 0,
         message: 'success',
         data: Mock.mock({
-          'token|20': ''
+          'token|20': '',
+          userInfo: {
+            cName: '@cname',
+            name: '@name',
+            email: '@email',
+            avatar: Mock.Random.image('240x240', '#000', '#fff', 'png', '@cName')
+          }
         })
       }
     }

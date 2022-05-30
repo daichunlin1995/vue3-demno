@@ -1,7 +1,16 @@
 <template>
   <div class="tab-style">
     <n-space :wrap="false">
-      <n-tag v-for="item in 10">haha</n-tag>
+      <n-tag
+        v-for="item in tabList"
+        :key="item.name"
+        :class="{ active: route.name === item.name }"
+        closable
+        @close.stop="handleTabClose(item)"
+        @click.stop="handleTabClick(item)"
+      >
+        {{ item.meta.label }}
+      </n-tag>
       <n-dropdown trigger="click" :options="options">
         <n-button text>
           <n-icon :size="20">
@@ -15,26 +24,41 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import type { DropdownOption } from 'naive-ui'
+import { c, DropdownOption } from 'naive-ui'
 import { CashOutline as CashIcon } from '@vicons/ionicons5'
-const options = reactive<DropdownOption[]>([
-  {
-    label: '滨海湾金沙，新加坡',
-    key: 'marina bay sands'
-  },
-  {
-    label: '布朗酒店，伦敦',
-    key: "brown's hotel, london"
-  },
-  {
-    label: '亚特兰蒂斯巴哈马，拿骚',
-    key: 'atlantis nahamas, nassau'
-  },
-  {
-    label: '比佛利山庄酒店，洛杉矶',
-    key: 'the beverly hills hotel, los angeles'
+import { storeToRefs } from 'pinia'
+import { tabStore } from '@/store/tab'
+import { useRoute, useRouter } from 'vue-router'
+import { Itab } from '/#/layout'
+const store = tabStore()
+const route = useRoute()
+const router = useRouter()
+const { tabList } = storeToRefs(store)
+const options = reactive<DropdownOption[]>([])
+
+// 关闭tab
+const handleTabClose = (item: Itab) => {
+  store.removeTabList(item)
+  if (store.tabList.length) {
+    // 跳转到上一个路由
+    router.push({
+      name: store.tabList[store.tabList.length - 1].name
+    })
+  } else {
+    // 返回首页
+    router.push('/dashboard')
   }
-])
+}
+
+// 点击tab
+const handleTabClick = (item: Itab) => {
+  // 跳转到对应路由
+  router.push({
+    name: item.name,
+    params: item.params,
+    query: item.query
+  })
+}
 </script>
 
 <style scoped lang="less">
@@ -51,9 +75,21 @@ const options = reactive<DropdownOption[]>([
   .n-space {
     height: 100%;
     > :deep(div) {
+      cursor: pointer;
       &:last-child {
         display: flex;
         align-items: center;
+      }
+      > div {
+        cursor: pointer;
+        &:hover .n-tag__content {
+          color: @mainColor !important;
+        }
+        &.active {
+          .n-tag__content {
+            color: @mainColor;
+          }
+        }
       }
     }
   }

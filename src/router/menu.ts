@@ -6,6 +6,7 @@ const routes: RouteRecordRaw[] = [
     name: 'DashBoard',
     meta: {
       label: '首页',
+      tab: true,
       icon: HomeOutline
     },
     component: () => import('@/views/DashBoard/index.vue')
@@ -24,6 +25,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Button',
         meta: {
           label: '按钮',
+          tab: true,
           icon: RadioButtonOn
         },
         component: () => import('@/views/Normal/Button.vue')

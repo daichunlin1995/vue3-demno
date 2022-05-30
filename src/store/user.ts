@@ -5,7 +5,12 @@ export const userStore = defineStore({
   id: Names.USER,
   state: () => ({
     vToken: getCookie('token') || '',
-    name: 'hello'
+    userInfo: {
+      cName: '',
+      name: '',
+      avatar: '',
+      email: ''
+    }
   }),
   actions: {
     setToken(token: string) {

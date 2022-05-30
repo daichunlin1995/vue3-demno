@@ -12,7 +12,10 @@
       <n-button quaternary>浅色</n-button>
       <n-button quaternary>Github</n-button>
       <n-dropdown :options="options" @select="handleAvatarSelect">
-        <n-avatar round src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
+        <div class="header-style_user">
+          <n-avatar round :src="userInfo.avatar" />
+          <n-ellipsis style="max-width: 100px">{{ userInfo.cName }}</n-ellipsis>
+        </div>
       </n-dropdown>
     </div>
   </n-layout-header>
@@ -26,9 +29,11 @@ import { NIcon } from 'naive-ui'
 import { PersonCircleOutline as UserIcon, LogOutOutline as LogoutIcon } from '@vicons/ionicons5'
 import type { Ioptions } from '/#/layout'
 import { userStore } from '@/store/user'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 const store = userStore()
 const router = useRouter()
+const { userInfo } = storeToRefs(store)
 // 头像下拉菜单使用icon
 const renderIcon = (icon: Component) => {
   return () => {
@@ -107,8 +112,13 @@ const handleLogOut = () => {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    .n-avatar {
-      margin-left: 20px;
+    .header-style_user {
+      display: flex;
+      align-items: center;
+      .n-avatar {
+        margin-left: 20px;
+        margin-right: 10px;
+      }
     }
   }
 }

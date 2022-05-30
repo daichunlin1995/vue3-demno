@@ -76,6 +76,10 @@ const handleLoginIn = (e: MouseEvent) => {
       if ((loginResponse as Partial<IResponse>).code === 0) {
         // 存储token
         store.setToken(loginResponse.data.token)
+        // 存储用户信息
+        store.$patch((state) => {
+          state.userInfo = loginResponse.data.userInfo
+        })
         // 跳转
         router.push({
           path: (route.query.redirect as string) || '/'

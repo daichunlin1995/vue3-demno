@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/node": "^17.0.35",
+    "@vicons/ionicons4": "^0.12.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vicons/utils": "^0.1.4",
     "animate.css": "^4.1.1",
@@ -27,7 +28,8 @@
     "pinia-plugin-persist": "^1.0.0",
     "unplugin-vue-components": "^0.19.5",
     "vue": "^3.2.25",
-    "vue-router": "^4.0.15"
+    "vue-router": "^4.0.15",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",
