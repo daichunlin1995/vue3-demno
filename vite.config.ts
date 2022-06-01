@@ -1,17 +1,20 @@
 /*
  * @Author       : daichunlin
  * @Date         : 2022-05-12 20:32:37
- * @LastEditors  : daichunlin
- * @LastEditTime : 2022-05-27 15:24:45
+ * @LastEditors: daichunlin
+ * @LastEditTime: 2022-06-01 12:53:04
  * @Description  : vite 配置
- * @FilePath     : /vue3-project/vite.config.ts
+ * @FilePath: /vue3-project/vite.config.ts
  */
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+// 引入 mockjs
 import { viteMockServe } from 'vite-plugin-mock'
+// 引入markdown支持
+const viteMarkdown = require('vite-plugin-markdown')
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, __dirname)
@@ -24,6 +27,9 @@ export default defineConfig(({ mode }) => {
       viteMockServe({
         mockPath: './src/mock',
         supportTs: true
+      }),
+      viteMarkdown.plugin({
+        mode: ['html', 'vue']
       })
     ],
     css: {
@@ -36,7 +42,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
-        '/#/': resolve(__dirname, './src/types')
+        '#': resolve(__dirname, './src/types')
       }
     },
     base: env.VITE_BASE_URL,

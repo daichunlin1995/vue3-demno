@@ -8,7 +8,7 @@
  */
 import axios from 'axios'
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { Iheaders } from '/#/axios'
+import { Iheaders } from '#axios'
 import { addPending, removePending } from './axiosCancel'
 import { httpErrorStatusHandle } from './status'
 const baseURL = import.meta.env.VITE_BASE_URL

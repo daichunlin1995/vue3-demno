@@ -24,7 +24,7 @@ import { User } from '@/api'
 import { userStore } from '@/store/user'
 import { useRouter, useRoute } from 'vue-router'
 import { setPwdEncrypt, setCookie } from '@/utils/helper'
-import { IResponse } from '/#/axios'
+import { IResponse } from '#/axios'
 interface ModelType {
   user: string
   password: string

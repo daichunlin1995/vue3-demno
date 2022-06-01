@@ -26,7 +26,7 @@
 import { ref, reactive } from 'vue'
 import { FormInst, FormRules, FormItemRule } from 'naive-ui'
 import { User } from '@/api'
-import { IResponse } from '/#/axios'
+import { IResponse } from '#/axios'
 import { useMessage } from 'naive-ui'
 type ModelType = {
   user: string

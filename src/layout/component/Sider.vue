@@ -11,6 +11,7 @@
     class="sider-style"
   >
     <n-menu
+      ref="menuInstRef"
       v-model:value="activeKey"
       :collapsed="collapsed"
       :collapsed-width="64"
@@ -21,13 +22,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { MenuOption } from 'naive-ui'
+import { onMounted, ref } from 'vue'
+import type { MenuOption, MenuInst } from 'naive-ui'
 import useMenuRoutes from '../hook/menu'
+import mitt from '@/utils/mitt'
 const activeKey = ref<string | null>(null)
 let collapsed = ref<boolean>(false)
 
 const menuOptions: MenuOption[] = useMenuRoutes()
+const menuInstRef = ref<MenuInst | null>(null)
+onMounted(() => {
+  mitt.on('menu-emit', (key: any) => {
+    // activeKey.value = key
+    // menuInstRef.value?.showOption(key)
+  })
+})
 </script>
 
 <style scoped lang="less">

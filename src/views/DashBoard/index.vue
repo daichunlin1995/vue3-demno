@@ -71,7 +71,7 @@
     </n-row>
     <n-row :gutter="24">
       <n-col :span="8">
-        <ShadowBox title="微博信息">
+        <ShadowBox title="折叠面板">
           <n-collapse>
             <n-collapse-item
               v-for="(item, index) in collapseList"
@@ -97,46 +97,184 @@
           </n-collapse>
         </ShadowBox>
       </n-col>
+      <n-col :span="8">
+        <ShadowBox title="加载动画">
+          <n-space vertical>
+            <n-spin :show="show">
+              <n-alert title="啦啦啦" type="success">明天再打开行李箱。宝贝，挂电话啦。</n-alert>
+              <template #description>你不知道你有多幸运</template>
+            </n-spin>
+            <n-button @click="show = !show" style="margin-bottom: 9px">
+              点击来{{ show ? '停止' : '转圈' }}
+            </n-button>
+          </n-space>
+        </ShadowBox>
+      </n-col>
+      <n-col :span="8" class="dashboard-style__height">
+        <ShadowBox title="骨架屏">
+          <n-space vertical>
+            <n-space class="dashboard-style__skeleton">
+              <n-skeleton height="28px" circle />
+              <n-skeleton height="28px" width="100px" />
+            </n-space>
+            <n-skeleton height="28px" width="66%" :sharp="false" />
+            <n-skeleton height="28px" width="88%" :sharp="false" />
+            <n-skeleton height="28px" width="100%" />
+          </n-space>
+        </ShadowBox>
+      </n-col>
+    </n-row>
+    <n-row :gutter="24">
+      <n-col :span="8">
+        <n-space vertical>
+          <ShadowBox title="自定义轮播">
+            <Carousel :list="carouselList1" show-arrow autoplay>
+              <img
+                v-for="(item, index) in carouselList1"
+                :key="index"
+                class="carousel-img"
+                :src="item"
+              />
+            </Carousel>
+          </ShadowBox>
+          <ShadowBox title="卡片轮播">
+            <Carousel
+              :list="carouselList2"
+              effect="card"
+              prev-slide-style="transform: translateX(-150%) translateZ(-800px);"
+              next-slide-style="transform: translateX(50%) translateZ(-800px);"
+              style="height: 240px"
+              :show-dots="false"
+              autoplay
+            >
+              <n-carousel-item
+                v-for="(item, index) in carouselList2"
+                :key="index"
+                :style="{ width: '60%' }"
+              >
+                <img class="carousel-img" :src="item" />
+              </n-carousel-item>
+            </Carousel>
+          </ShadowBox>
+        </n-space>
+      </n-col>
+      <n-col :span="16" class="dashboard-style__chart">
+        <ShadowBox title="图表展示">
+          <Chart :data="chartData" />
+        </ShadowBox>
+      </n-col>
+    </n-row>
+    <n-row :gutter="24" class="dashboard-style__rest">
+      <n-col :span="12">
+        <ShadowBox title="评分尺寸">
+          <n-space align="center" class="dashboard-style__star">
+            <n-rate size="small" />
+            <n-rate size="medium" />
+            <n-rate size="large" />
+          </n-space>
+          <n-space vertical>
+            <n-ellipsis style="max-width: 100%">
+              或许人逐渐变得成熟的标志便是，将责任体面尽数扛起，也将心酸委屈一并承担
+            </n-ellipsis>
+          </n-space>
+        </ShadowBox>
+      </n-col>
+      <n-col :span="12">
+        <ShadowBox title="颜色选择">
+          <n-space class="dashboard-style__color">
+            <n-statistic label="基础用法" tabular-nums>
+              <template #suffix>
+                <n-color-picker />
+              </template>
+            </n-statistic>
+            <n-statistic label="不透明度" tabular-nums>
+              <template #suffix>
+                <n-color-picker :show-alpha="false" />
+              </template>
+            </n-statistic>
+          </n-space>
+          <n-space vertical>
+            <n-ellipsis style="max-width: 100%">
+              或许人逐渐变得成熟的标志便是，将责任体面尽数扛起，也将心酸委屈一并承担
+            </n-ellipsis>
+          </n-space>
+        </ShadowBox>
+      </n-col>
     </n-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import ShadowBox from '@/components/DashBoard/ShadowBox.vue'
 import { NumberAnimationInst } from 'naive-ui'
 import { ref, reactive, onMounted } from 'vue'
 import { MdSave } from '@vicons/ionicons4'
-import useCollapseApi from './hooks/collapse'
-import { IcollapseType } from '/#/dashboard'
-// ref dom
+import * as DashBoardApi from './hooks/request'
+import { IcollapseType } from '#/dashboard'
+import ShadowBox from '@/components/DashBoard/ShadowBox.vue'
+import Carousel from '@/components/DashBoard/Carousel.vue'
+import Chart from '@/components/DashBoard/Chart.vue'
+// -- 基础信息 -- start --
 const modelNumberToRef = ref<NumberAnimationInst | null>(null)
-
 // 开启动画
 const handleModelPalyItem = () => {
   modelNumberToRef.value?.play()
 }
+// -- end --
 
-// 折叠面板数据
+// -- 折叠面板 -- start --
+// 数据
 const collapseList = reactive<IcollapseType[]>([])
 
 // 点击名字跳转
 const handleLinkToWeibo = (link: string) => {
   window.open(link, '_blank')
 }
+// -- end --
+
+// 加载动画loading
+let show = ref<boolean>(false)
+
+// -- 轮播图 -- start --
+let carouselList1 = ref<string[]>([])
+let carouselList2 = ref<string[]>([])
+
+// -- end --
+
+// -- echart -- start --
+let chartData = ref<Array<[string, number]>>([])
+// -- end --
 
 onMounted(() => {
   // 折叠面板数据请求 -- AxiosResponse 类型定义待处理
-  useCollapseApi().then((res: any) => {
-    collapseList.push(...res)
+  DashBoardApi.useCollapseApi().then((res: any) => {
+    collapseList.push(...res.data)
+  })
+
+  // 自定义轮播图数据请求
+  DashBoardApi.useCarouselApi(1).then((res: any) => {
+    carouselList1.value = res.data
+    carouselList2.value = res.data
+  })
+
+  // 图表数据1请求
+  DashBoardApi.useChartDataApi().then((res: any) => {
+    chartData.value = res.data
   })
 })
 </script>
 
 <style scoped lang="less">
 .dashboard-style {
+  height: calc((100vh - 101px));
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   .n-row {
     margin-bottom: 20px !important;
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
   }
   .space-style {
     > :deep(div) {
@@ -167,6 +305,52 @@ onMounted(() => {
       }
       .n-card__content {
         padding: 0;
+      }
+    }
+  }
+  .dashboard-style__height,
+  .dashboard-style__chart {
+    > :deep(div) {
+      height: 100%;
+      > div {
+        height: 100%;
+        box-sizing: border-box;
+      }
+    }
+    &.dashboard-style__chart {
+      height: 616px;
+    }
+  }
+  .dashboard-style__skeleton {
+    width: 100%;
+  }
+  .carousel-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+  }
+  .dashboard-style__rest {
+    flex: 1;
+    > :deep(div) {
+      height: 100%;
+      > div {
+        height: 100%;
+        box-sizing: border-box;
+      }
+    }
+    .box-shadow-style {
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+    .dashboard-style__color,
+    .dashboard-style__star {
+      flex: 1;
+      &.dashboard-style__color {
+        > :deep(div) {
+          width: 40%;
+        }
       }
     }
   }

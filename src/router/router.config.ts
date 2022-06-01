@@ -4,8 +4,10 @@ const whiteList: string[] = []
 export function useRouterListener(router: Router) {
   // 设置路由拦截
   router.beforeEach((to, from, next) => {
+    // 显示加载条
+    window.$loadingBar?.start()
     if (to.path === '/login') {
-      // 安心进入登录 避免死循环
+      // 进入登录 避免死循环
       next()
       return
     }
@@ -23,5 +25,9 @@ export function useRouterListener(router: Router) {
         }
       })
     }
+  })
+  router.afterEach(() => {
+    // 结束加载条
+    window.$loadingBar?.finish()
   })
 }

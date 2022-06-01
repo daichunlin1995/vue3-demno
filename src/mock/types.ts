@@ -1,3 +1,9 @@
+export type responseType = {
+  code: number
+  message: string
+  data: any
+}
+
 export type LoginType = {
   user: string
   password: string

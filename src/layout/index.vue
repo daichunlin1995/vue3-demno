@@ -17,7 +17,7 @@ import Main from './component/Main.vue'
 import { useRouter, RouteRecordName } from 'vue-router'
 import { watch } from 'vue'
 import { tabStore } from '@/store/tab'
-import { Itab } from '/#/layout'
+import { Itab } from '#layout'
 const router = useRouter()
 const store = tabStore()
 watch(

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { Names } from './store-namespace'
-import { Itab } from '/#/layout'
+import { Itab } from '#layout'
 export const tabStore = defineStore({
   id: Names.ROUTE,
   state: () => ({

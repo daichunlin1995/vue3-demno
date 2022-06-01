@@ -28,8 +28,9 @@ import { c, DropdownOption } from 'naive-ui'
 import { CashOutline as CashIcon } from '@vicons/ionicons5'
 import { storeToRefs } from 'pinia'
 import { tabStore } from '@/store/tab'
-import { useRoute, useRouter } from 'vue-router'
-import { Itab } from '/#/layout'
+import { useRoute, useRouter, RouteRecordName } from 'vue-router'
+import { Itab } from '#/layout'
+import mitt from '@/utils/mitt'
 const store = tabStore()
 const route = useRoute()
 const router = useRouter()
@@ -48,6 +49,7 @@ const handleTabClose = (item: Itab) => {
     // 返回首页
     router.push('/dashboard')
   }
+  handleMenuEmit(item.name)
 }
 
 // 点击tab
@@ -58,6 +60,12 @@ const handleTabClick = (item: Itab) => {
     params: item.params,
     query: item.query
   })
+  handleMenuEmit(item.name)
+}
+
+// 触发menu变更事件
+const handleMenuEmit = (name: RouteRecordName) => {
+  // mitt.emit('menu-emit', name)
 }
 </script>
 

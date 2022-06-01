@@ -18,4 +18,6 @@ const store = usePinia()
 app.use(store)
 // 引入mock
 import './mock'
+// 引入全局window挂载
+// import './utils/window'
 app.mount('#app')
